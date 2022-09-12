@@ -1,0 +1,5 @@
+SQLAlchemy==1.4.15
+Celery
+Redis
+marshmallow==3.12.1
+marshmallow-sqlalchemy==0.25.0

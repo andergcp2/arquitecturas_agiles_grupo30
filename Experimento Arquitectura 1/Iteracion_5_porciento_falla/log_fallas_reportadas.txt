@@ -1,0 +1,6 @@
+2022-09-11 22:13:27.324742 - Falla reportada id: 62
+2022-09-11 22:13:45.467576 - Falla reportada id: 79
+2022-09-11 22:13:51.608238 - Falla reportada id: 83
+2022-09-11 22:13:57.729776 - Falla reportada id: 90
+2022-09-11 22:14:09.849323 - Falla reportada id: 99
+2022-09-11 22:14:18.987366 - Falla reportada id: 108

@@ -1,0 +1,6 @@
+2022-09-11 22:13:23.885224 - Falla generada id: 62
+2022-09-11 22:13:43.067148 - Falla generada id: 79
+2022-09-11 22:13:48.098464 - Falla generada id: 83
+2022-09-11 22:13:56.159507 - Falla generada id: 90
+2022-09-11 22:14:06.245601 - Falla generada id: 99
+2022-09-11 22:14:16.323467 - Falla generada id: 108
