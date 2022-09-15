@@ -1,0 +1,49 @@
+ _format_version: "3.0"
+ _transform: true
+
+ services:
+ - host: mockbin.org
+   name: example_service
+   port: 80
+   protocol: http
+   routes:
+   - name: example_route
+     paths:
+     - /mock
+     strip_path: true
+
+- name: users
+  url: http://localhost:5000/
+  host: 127.0.0.1
+  routes:
+  - name: user-route
+    hosts:
+    - users.com
+    methods: [GET,POST,DELETE,PUT]
+
+- name: movies
+  url: http://localhost:5001/
+  host: 127.0.0.1
+  routes:
+  - name: movies-route
+    hosts:
+    - movies.com
+    methods: [GET,POST,DELETE,PUT]
+
+- name: showtimes
+  url: http://localhost:5002/
+  host: 127.0.0.1
+  routes:
+  - name: showtimes-route
+    hosts:
+    - showtimes.com
+    methods: [GET,POST,DELETE,PUT]
+
+- name: bookings
+  url: http://localhost:5003/
+  host: 127.0.0.1
+  routes:
+  - name: bookings-route
+    hosts:
+    - bookings.com
+    methods: [GET,POST,DELETE,PUT]
