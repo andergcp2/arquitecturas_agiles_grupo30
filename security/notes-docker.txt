@@ -1,0 +1,28 @@
+- desde VSC 
+cd security 
+
+- Build the docker Image
+docker build -t eporra-flask:latest .
+
+- Run the Docker Container
+docker run -d --name eporra-api --network=kong-net -p 5000:5000 eporra-flask
+
+
+varios
+======
+docker container ls
+docker inspect  44dba1a6a8f2
+
+docker ps
+docker inspect -f '{{range.NetworkSettings.Networks}} {{. IPAddress}} {{end}}' 44dba1a6a8f2
+
+
+compose
+=======
+
+docker network ls
+#docker-compose build eporra-flask
+docker-compose up eporra-flask
+
+docker container stop $(docker container ls -aq)
+docker container rm $(docker container ls -aq)

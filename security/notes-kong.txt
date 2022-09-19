@@ -1,0 +1,92 @@
+Install and run Kong with docker
+================================
+
+https://wstutorial.com/misc/api-gateway-kong.html
+
+- Nota: Abrir WSL-Ubuntu modo administrador
+
+Installation
+
+- Step1: Create a Docker network
+
+docker network ls
+docker network create kong-net
+
+- Step2: Start and prepare Postgres DB
+
+docker run -d --name kong-database --network=kong-net \
+-e "POSTGRES_USER=kong" -e "POSTGRES_DB=kong" -e "POSTGRES_PASSWORD=kong" \
+-p 5432:5432 postgres:9.6
+
+docker run --rm --network=kong-net \
+-e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" \
+-e "KONG_PG_PASSWORD=kong" kong:latest kong migrations bootstrap
+
+- Step3: Start kong
+
+docker run -d --name kong --network=kong-net \
+-e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" \
+-e "KONG_PG_PASSWORD=kong" -e "KONG_PROXY_ACCESS_LOG=/dev/stdout" \
+-e "KONG_ADMIN_ACCESS_LOG=/dev/stdout" -e "KONG_PROXY_ERROR_LOG=/dev/stderr" \
+-e "KONG_ADMIN_ERROR_LOG=/dev/stderr" -e "KONG_ADMIN_LISTEN=0.0.0.0:8001, 0.0.0.0:8444 ssl" \
+-p 8000:8000 -p 8443:8443 -p 8001:8001 -p 8444:8444 kong:latest
+
+
+
+Configuring a service
+
+curl --request DELETE --url localhost:8001/routes/a7e3add2-a93c-43b8-8598-48b3d1715399
+curl --request DELETE --url localhost:8001/routes/example_route
+curl --request DELETE --url localhost:8001/services/eporra-api
+curl --request DELETE --url localhost:8001/services/test-api
+
+- Step1: Add a service
+
+# curl -i -s -X POST http://localhost:8001/services --data name=test-api --data url='http://mockbin.org'
+
+curl -i -s -X POST http://localhost:8001/services --data name=eporra-api --data 'url=http://localhost:5000/'
+
+curl --request PATCH --url localhost:8001/services/eporra-api --data retries=6
+
+curl -X GET http://localhost:8001/services/eporra-api
+
+
+- Step2: Add a route
+
+curl -i -X POST http://localhost:8001/services/eporra-api/routes --data 'paths[]=/eporra' --data name=eporra-route
+
+curl --request PATCH --url localhost:8001/services/eporra-api/routes/eporra-route --data tags="tutorial"
+
+curl -i -X GET http://localhost:8001/services/eporra-api/routes/eporra-route
+curl -i -X GET http://localhost:8001/routes/eporra-route
+
+
+- Call the API directly
+
+curl -i http://127.0.0.1:5000/
+
+
+- Call the API behind kong
+
+curl -i http://localhost:8000/eporra
+
+curl -i -X GET --url http://127.0.0.1:8000/eporra
+
+
+- CORS Example plugin configuration
+
+curl -X POST http://localhost:8001/services/SERVICE_NAME|SERVICE_ID/plugins \
+    --data "name=cors"  \
+    --data "config.origins=http://mockbin.com" \
+    --data "config.methods=GET" \
+    --data "config.methods=POST" \
+    --data "config.headers=Accept" \
+    --data "config.headers=Accept-Version" \
+    --data "config.headers=Content-Length" \
+    --data "config.headers=Content-MD5" \
+    --data "config.headers=Content-Type" \
+    --data "config.headers=Date" \
+    --data "config.headers=X-Auth-Token" \
+    --data "config.exposed_headers=X-Auth-Token" \
+    --data "config.credentials=true" \
+    --data "config.max_age=3600"

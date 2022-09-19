@@ -1,0 +1,23 @@
+version: '3.9'
+
+networks:
+  kong-net:
+
+services:
+  eporra-flask:
+    container_name: flask-api
+    image: eporra-api
+    build: .
+    volumes:
+      - ./eporra:/home/magon/app
+    ports:
+      - "5000:5000"
+    networks:
+      - kong-net
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY='23wewwe4t4t4tt5'
+    restart: always
+
+volumes:
+  eporra: {}
