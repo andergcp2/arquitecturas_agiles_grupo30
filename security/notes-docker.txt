@@ -1,11 +1,19 @@
 - desde VSC 
 cd security 
 
-- Build the docker Image
-docker build -t eporra-flask:latest .
+- Build the docker Image and Run the Docker Container
 
-- Run the Docker Container
+cd eporra
+docker build -t eporra-flask:latest .
 docker run -d --name eporra-api --network=kong-net -p 5000:5000 eporra-flask
+
+cd rules
+docker build -t rules-flask:latest .
+docker run -d --name rules-api --network=kong-net -p 5001:5000 rules-flask
+
+cd reports
+docker build -t reports-flask:latest .
+docker run -d --name reports-api --network=kong-net -p 5002:5000 reports-flask
 
 
 varios
@@ -15,6 +23,12 @@ docker inspect  44dba1a6a8f2
 
 docker ps
 docker inspect -f '{{range.NetworkSettings.Networks}} {{. IPAddress}} {{end}}' 44dba1a6a8f2
+
+#docker network inspect kong-net
+docker ps --format '{{ .ID }} {{ json .Networks }} {{ .Names }}'
+
+docker network disconnect kong-net eporra-api
+docker network connect kong-net eporra-api 
 
 
 compose
@@ -26,3 +40,6 @@ docker-compose up eporra-flask
 
 docker container stop $(docker container ls -aq)
 docker container rm $(docker container ls -aq)
+
+docker container stop 
+docker container rm 
