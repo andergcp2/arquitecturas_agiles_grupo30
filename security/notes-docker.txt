@@ -3,17 +3,17 @@ cd security
 
 - Build the docker Image and Run the Docker Container
 
-cd eporra
-docker build -t eporra-flask:latest .
-docker run -d --name eporra-api --network=kong-net -p 5000:5000 eporra-flask
+# cd eporra
+# docker build -t eporra-flask:latest .
+# docker run -d --name eporra-api --network=kong-net -p 5000:5000 eporra-flask
 
-cd rules
-docker build -t rules-flask:latest .
-docker run -d --name rules-api --network=kong-net -p 5001:5000 rules-flask
+cd rules-command
+docker build -t rules-cmd:latest .
+docker run -d --name rules-cmd-api --network=kong-net -p 5001:5000 rules-cmd
 
-cd reports
-docker build -t reports-flask:latest .
-docker run -d --name reports-api --network=kong-net -p 5002:5000 reports-flask
+cd rules-query
+docker build -t rules-qry:latest .
+docker run -d --name rules-qry-api --network=kong-net -p 5002:5000 rules-qry
 
 
 varios

@@ -2,13 +2,13 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-@app.route("/reports")
+@app.route("/rules")
 def root():
-    return jsonify({'reportId': 72}), 200
+    return jsonify({'ruleId': 3}, {'ruleId': 6}, {'ruleId': 9}), 200
 
 @app.route("/check")
 def check():
-    return jsonify({"status": "ok"}), 200
+    return jsonify({"status": "rules command running"}), 200
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
