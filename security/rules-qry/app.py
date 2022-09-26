@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
 from modelos import db
-from vistas import VistaRule, VistaRules, VistaKong
+from vistas import VistaRule, VistaRules
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///rules.db'
@@ -23,6 +23,5 @@ cors = CORS(app)
 api = Api(app)
 api.add_resource(VistaRule, '/rule/<int:rule_id>')
 api.add_resource(VistaRules, '/rules')
-api.add_resource(VistaKong, '/')
 
 jwt = JWTManager(app)

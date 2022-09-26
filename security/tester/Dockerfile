@@ -1,11 +1,17 @@
 FROM python:3.8-slim-buster
 RUN pip install --upgrade pip
-ADD ./ /home/magon/login
-WORKDIR /home/magon/login
+ADD ./ /home/magon/tester
+WORKDIR /home/magon/tester
 RUN pip3 install -r requirements.txt
 EXPOSE 5000
 #ENTRYPOINT ["python3", "run.py"]
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+
+# syntax=docker/dockerfile:1
+#WORKDIR /python-docker
+#COPY requirements.txt requirements.txt
+#RUN pip3 install -r requirements.txt
+#CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
 
 # FROM python:3.8-alpine
 # RUN apk add --no-cache --virtual .build-deps gcc musl-dev python3-dev

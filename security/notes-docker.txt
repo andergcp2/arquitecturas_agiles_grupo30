@@ -3,9 +3,14 @@ cd security
 
 - Build the docker Image and Run the Docker Container
 
-# cd eporra
-# docker build -t eporra-flask:latest .
-# docker run -d --name eporra-api --network=kong-net -p 5000:5000 eporra-flask
+cd tester
+docker build -t tester-lab2:latest .
+docker run -d --name tester-labsec --network=kong-net -p 6000:5000 tester-lab2
+
+
+cd login
+docker build -t login-jwt:latest .
+docker run -d --name login-jwt-api --network=kong-net -p 5000:5000 login-jwt
 
 cd rules-command
 docker build -t rules-cmd:latest .

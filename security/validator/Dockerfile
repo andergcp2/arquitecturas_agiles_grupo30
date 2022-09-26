@@ -1,7 +1,7 @@
 FROM python:3.8-slim-buster
 RUN pip install --upgrade pip
-ADD ./ /home/magon/eporra
-WORKDIR /home/magon/eporra
+ADD ./ /home/magon/validator
+WORKDIR /home/magon/validator
 RUN pip3 install -r requirements.txt
 EXPOSE 5000
 #ENTRYPOINT ["python3", "run.py"]
