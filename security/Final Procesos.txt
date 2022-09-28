@@ -1,0 +1,36 @@
+
+
+Producto Final Procesos
+
+- Revista implementada en power point
+  marcos de trabajo, practicas y herramientas 
+  objetivo: conseguir mas estudiantes para tener una revista muy robusta
+
+
+- indice de contenido
+- es necesario tener por lo menos una pagina de cada tipo
+- en las paginas de imagen deben tener imagenes relacionadas al tema
+- entre mas paginas mejor, balanceadas de todos los tipos
+- tratar de generar el mayor valor posible
+
+descargar el ppt y copiarlo en el espacio del equipo
+
+
+Tutor L4	Francisco
+Equipo L4	Patrick, Rafael, Andres, 
+
+7:55 8:35
+8:35 9:05
+9:05 9:35
+
+inicio: 
+conformacion equipo: scrum master, acuerdos
+vision de alcance
+planeacion
+arquitectura
+
+Sprint
+10m	planning
+10m build
+ 5m	demo
+ 5m	retrospective

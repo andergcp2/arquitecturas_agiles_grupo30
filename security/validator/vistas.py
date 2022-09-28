@@ -11,14 +11,17 @@ from sqlalchemy import or_, desc
 class VistaSecurityCheck(Resource):
 
     def post(self):
+
+        #print("validator headers: ", request.headers)
+
         ip = request.headers["Test-IP"]
         ips = ['10.20.0.1', '10.20.0.2', '10.20.0.3']
         if ip not in ips:
-            return {"status": "403", "mensaje": "security check black list IP: "+ ip}
+            return {"status": "400", "mensaje": "security check black list IP: "+ ip}
 
         city = request.headers["Test-City"]
         cities = ['bogota', 'cali', 'killa']
         if city not in cities:
-            return {"status": "404", "mensaje": "security check wrong location: "+ city}
+            return {"status": "403", "mensaje": "security check wrong location: "+ city}
 
         return {"status": "200", "mensaje": "security check ok"}

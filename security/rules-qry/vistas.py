@@ -18,12 +18,11 @@ class VistaRules(Resource):
     def get(self):
         # user_id = get_jwt_identity()
         
-        #print("headers: ", request.headers)
+        #print("rules-qry headers: ", request.headers)
         #headers = {'Test-City': 'killa', 'Test-IP': '10.20.0.3', 
-        rules_qry_resp = requests.get('http://localhost:3691/check', headers = request.headers) 
-        
-        print(rules_qry_resp)
+        rules_qry_resp = requests.post('http://localhost:3691/check', headers = request.headers) 
+        print("rules-qry resp: ", rules_qry_resp)        
         #if rules_qry_resp == 200:
         
-        return {"mensaje": rules_qry_resp}
+        return rules_qry_resp.json()
         # return [rule_schema.dump(ca) for ca in Rule.query.all()]
