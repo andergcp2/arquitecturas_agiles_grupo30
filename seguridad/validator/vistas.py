@@ -37,14 +37,11 @@ class VistaSecurityCheck(Resource):
         if role_check == True and ip_check == True and city_check == True and time_check == True:
             return True
 
-        if not role_check == True:
-            return role_check
-        if not ip_check == True:
-            return ip_check
-        if not city_check == True:
-            return city_check
-        if not time_check == True: 
-            return time_check
+        checks = [role_check, ip_check, city_check, time_check]
+        for ch in checks:
+            if not ch == True:
+                print("Pailas")
+                return ch
 
     def check_role(self, headers):
         role = decode_token(headers["Authorization"].split()[1])["role"]
@@ -57,6 +54,7 @@ class VistaSecurityCheck(Resource):
     def check_ip(self, headers):
         ip = headers["Test-IP"]
         ips = ['10.20.0.1', '10.20.0.2', '10.20.0.3']
+
         if ip not in ips:
             self.send_sec_alert("sec", {"status": "400", "mensaje": "security check black list IP: "+ ip, "receptores": "[{}]".format(self.admin_email)})
             return {"status": "400", "mensaje": "security check black list IP: "+ ip}
@@ -74,6 +72,7 @@ class VistaSecurityCheck(Resource):
 
     def check_time(self, headers):
         time = headers["Test-Time"]
+
         if time:
             dt = datetime.strptime(time, '%d.%m.%Y %H:%M:%S')
             if dt.hour >= 0 and dt.hour < 5:
