@@ -25,7 +25,7 @@ class VistaSignIn(Resource):
         db.session.add(new_user)
         db.session.query(User).filter(User.usr.like(request.json["user"])).first()
         db.session.commit()
-        token = create_access_token(identity=new_user.id, additional_claims={"role": new_user.role, "user": new_user.usr, "username": new_user.name})
+        token = create_access_token(identity=new_user.id, additional_claims={"role": new_user.role, "user": new_user.usr, "username": new_user.name, "email": new_user.email})
         return {"mensaje": "user created ok", "token": token, "id": new_user.id}
 
     def validateUser(self, request):
@@ -46,5 +46,5 @@ class VistaLogIn(Resource):
         if user is None:
             return "user does not exist", 404
         else:
-            token = create_access_token(identity=user.id, additional_claims={"role": user.role, "user": user.usr, "username": user.name})
+            token = create_access_token(identity=user.id, additional_claims={"role": user.role, "user": user.usr, "username": user.name, "email": user.email})
             return {"mensaje": "login ok", "token": token}
