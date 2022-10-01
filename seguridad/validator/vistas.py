@@ -40,7 +40,6 @@ class VistaSecurityCheck(Resource):
         checks = [role_check, ip_check, city_check, time_check]
         for ch in checks:
             if not ch == True:
-                print("Pailas")
                 return ch
 
     def check_role(self, headers):
