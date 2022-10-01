@@ -42,25 +42,30 @@ curl --request DELETE --url localhost:8001/services/reports-api
 
 - Step1: Add a service (la url debe ser la del container)
 
+curl -i -s -X POST http://localhost:8001/services --data name=login --data 'url=http://127.0.0.1:3690/'
 curl -i -s -X POST http://localhost:8001/services --data name=rules-cmd-api --data 'url=http://172.20.0.2:5000/'
 curl -i -s -X POST http://localhost:8001/services --data name=rules-qry-api --data 'url=http://172.20.0.3:5000/'
 
+curl -X GET http://localhost:8001/services/login
 curl -X GET http://localhost:8001/services/rules-qry-api
 curl -X GET http://localhost:8001/services/rules-cmd-api
 
-curl --request PATCH --url localhost:8001/services/rules-cmd-api --data retries=6
+curl --request PATCH --url localhost:8001/services/login --data retries=6
 curl --request PATCH --url localhost:8001/services/rules-cmd-api --data 'url=http://127.0.0.1:5000/'
 curl --request PATCH --url localhost:8001/services/rules-cmd-api --data 'url=http://172.20.0.4:5000/'
 
 
 - Step2: Add a route
 
+curl -i -X POST http://localhost:8001/services/login/routes --data 'paths[]=/login' --data name=ruta-login
 curl -i -X POST http://localhost:8001/services/rules-cmd-api/routes --data 'paths[]=/rules-cmd' --data name=rules-cmd-ruta
 curl -i -X POST http://localhost:8001/services/rules-qry-api/routes --data 'paths[]=/rules-qry' --data name=rules-qry-ruta
 
+curl --request PATCH --url localhost:8001/services/login/routes/ruta-login --data tags="lab2-security"
 curl --request PATCH --url localhost:8001/services/rules-cmd-api/routes/rules-cmd-ruta --data tags="tutorial1"
 curl --request PATCH --url localhost:8001/services/rules-qry-api/routes/rules-qry-ruta --data tags="tutorial2"
 
+curl -i -X GET http://localhost:8001/routes/ruta-login
 curl -i -X GET http://localhost:8001/routes/rules-cmd-ruta
 curl -i -X GET http://localhost:8001/routes/rules-qry-ruta
 
@@ -68,10 +73,11 @@ curl -i -X GET http://localhost:8001/routes/rules-qry-ruta
 - Call the API directly
 
 # curl -i http://172.20.0.2:5000/
-
+curl -i http://127.0.0.1:3690/
 
 - Call the API behind kong
 
+curl -i http://localhost:8000/login
 curl -i http://localhost:8000/rules-cmd/rules
 curl -i http://localhost:8000/rules-cmd/check
 

@@ -29,52 +29,49 @@ def test_signin():
 
 
 @app.route('/test3')
-def test_OK():
-    print("");
-    print("{} - test-login".format(datetime.now()))
+def test_ok():
+    print(str(datetime.now()) +" test-login")
     login = {'user': 'admin', 'password': 'adminABC'}
     login_resp = requests.post('http://localhost:3690/login', json=login) 
     
-    print("{} - test-rules".format(datetime.now()))
+    print(str(datetime.now()) +" test-rules")
     token = login_resp.json()['token'] 
     headers = {'Test-IP': '10.20.0.3', 'Test-City': 'cali', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
     rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers) 
     #endpoint_carreras = "/usuario/{}/carreras".format(str(self.usuario_code))
 
-    print("{} - test-return {}".format(datetime.now(), str(rules_qry_resp)))
+    print(str(datetime.now()) +" test-return")
     return rules_qry_resp.json()
 
 
 @app.route('/test4')
 def test_ip():
-    print("");
-    print("{} - test-login".format(datetime.now()))
+    print(str(datetime.now()) +" test-login")
     login = {'user': 'admin', 'password': 'adminABC'}
     login_resp = requests.post('http://localhost:3690/login', json=login) 
     
-    print("{} - test-rules".format(datetime.now()))
+    print(str(datetime.now()) +" test-rules")
     token = login_resp.json()['token'] 
     headers = {'Test-IP': '10.20.0.9', 'Test-City': 'chia', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
     rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers) 
     #endpoint_carreras = "/usuario/{}/carreras".format(str(self.usuario_code))
 
-    print("{} - test-return {}".format(datetime.now(), str(rules_qry_resp)))
+    print(str(datetime.now()) +" test-return")
     return rules_qry_resp.json()
 
 @app.route('/test5')
 def test_city():
-    print("");
-    print("{} - test-login".format(datetime.now()))
+    print(str(datetime.now()) +" test-login")
     login = {'user': 'admin', 'password': 'adminABC'}
     login_resp = requests.post('http://localhost:3690/login', json=login) 
     
-    print("{} - test-rules".format(datetime.now()))
+    print(str(datetime.now()) +" test-rules")
     token = login_resp.json()['token'] 
     headers = {'Test-IP': '10.20.0.3', 'Test-City': 'chia', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
     rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers) 
     #endpoint_carreras = "/usuario/{}/carreras".format(str(self.usuario_code))
 
-    print("{} - test-return {}".format(datetime.now(), str(rules_qry_resp)))
+    print(str(datetime.now()) +" test-return")
     return rules_qry_resp.json()
 
 
