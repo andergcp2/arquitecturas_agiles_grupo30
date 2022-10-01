@@ -1,0 +1,129 @@
+Install and run Kong with docker
+================================
+
+https://wstutorial.com/misc/api-gateway-kong.html
+
+- Nota: Abrir WSL-Ubuntu modo administrador
+
+Installation
+
+- Step1: Create a Docker network
+
+docker network ls
+docker network create kong-net
+
+- Step2: Start and prepare Postgres DB
+
+docker run -d --name kong-database --network=kong-net \
+-e "POSTGRES_USER=kong" -e "POSTGRES_DB=kong" -e "POSTGRES_PASSWORD=kong" \
+-p 5432:5432 postgres:9.6
+
+docker run --rm --network=kong-net \
+-e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" \
+-e "KONG_PG_PASSWORD=kong" kong:latest kong migrations bootstrap
+
+- Step3: Start kong
+
+docker run -d --name kong --network=kong-net \
+-e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" \
+-e "KONG_PG_PASSWORD=kong" -e "KONG_PROXY_ACCESS_LOG=/dev/stdout" \
+-e "KONG_ADMIN_ACCESS_LOG=/dev/stdout" -e "KONG_PROXY_ERROR_LOG=/dev/stderr" \
+-e "KONG_ADMIN_ERROR_LOG=/dev/stderr" -e "KONG_ADMIN_LISTEN=0.0.0.0:8001, 0.0.0.0:8444 ssl" \
+-p 8000:8000 -p 8443:8443 -p 8001:8001 -p 8444:8444 kong:latest
+
+
+Configuring a service
+
+curl --request DELETE --url localhost:8001/routes/rules-route
+curl --request DELETE --url localhost:8001/services/rules-api
+
+curl --request DELETE --url localhost:8001/routes/reports-route
+curl --request DELETE --url localhost:8001/services/reports-api
+
+- Step1: Add a service (la url debe ser la del container)
+
+curl -i -s -X POST http://localhost:8001/services --data name=login --data 'url=http://127.0.0.1:3690/'
+curl -i -s -X POST http://localhost:8001/services --data name=rules-cmd-api --data 'url=http://172.20.0.2:5000/'
+curl -i -s -X POST http://localhost:8001/services --data name=rules-qry-api --data 'url=http://172.20.0.3:5000/'
+
+curl -X GET http://localhost:8001/services/login
+curl -X GET http://localhost:8001/services/rules-qry-api
+curl -X GET http://localhost:8001/services/rules-cmd-api
+
+curl --request PATCH --url localhost:8001/services/login --data retries=6
+curl --request PATCH --url localhost:8001/services/rules-cmd-api --data 'url=http://127.0.0.1:5000/'
+curl --request PATCH --url localhost:8001/services/rules-cmd-api --data 'url=http://172.20.0.4:5000/'
+
+
+- Step2: Add a route
+
+curl -i -X POST http://localhost:8001/services/login/routes --data 'paths[]=/login' --data name=ruta-login
+curl -i -X POST http://localhost:8001/services/rules-cmd-api/routes --data 'paths[]=/rules-cmd' --data name=rules-cmd-ruta
+curl -i -X POST http://localhost:8001/services/rules-qry-api/routes --data 'paths[]=/rules-qry' --data name=rules-qry-ruta
+
+curl --request PATCH --url localhost:8001/services/login/routes/ruta-login --data tags="lab2-security"
+curl --request PATCH --url localhost:8001/services/rules-cmd-api/routes/rules-cmd-ruta --data tags="tutorial1"
+curl --request PATCH --url localhost:8001/services/rules-qry-api/routes/rules-qry-ruta --data tags="tutorial2"
+
+curl -i -X GET http://localhost:8001/routes/ruta-login
+curl -i -X GET http://localhost:8001/routes/rules-cmd-ruta
+curl -i -X GET http://localhost:8001/routes/rules-qry-ruta
+
+
+- Call the API directly
+
+# curl -i http://172.20.0.2:5000/
+curl -i http://127.0.0.1:3690/
+
+- Call the API behind kong
+
+curl -i http://localhost:8000/login
+curl -i http://localhost:8000/rules-cmd/rules
+curl -i http://localhost:8000/rules-cmd/check
+
+curl -i http://localhost:8000/rules-qry/rules
+curl -i http://localhost:8000/rules-qry/check
+
+curl -i -X GET --url http://127.0.0.1:8000/rules-cmd/check
+curl -i -X GET --url http://127.0.0.1:8000/rules-qry/check
+
+
+https://refactorizando.com/arquitectura-microservicios-kong-konga/
+Arquitectura de Microservicios con Kong API Gateway y Konga
+
+docker-compose up
+
+
+===
+JWT
+===
+
+A JWT has a data payload signed by a trusted party to prevent spoofing. An authorizer verifies 
+that the JWT token is authentic, allowing (or forbidding) access to that resource. 
+Typically, a JWT payload is not encrypted; it’s open for the whole world to read. However, 
+what’s critical is the authenticity of a token, which depends on a trusted party signing it.
+
+As more companies move from monolithic systems to microservices, a decoupled front-line API gateway 
+to those services — providing authentication, traffic control, request and response transformation — 
+becomes increasingly crucial. Kong Gateway, which is open source, serves as that thin layer between 
+your users and your upstream microservices.
+
+In this approach, the plugin serves as the JWT authorizer. It authenticates the JWT in the HTTP request 
+by verifying that token’s claims and ensuring a trusted party signed it. Then, depending on whether 
+these steps were successful, Kong Gateway routes the upstream service request.
+
+Basic JWT and API Gateway Use Case
+
+In this basic use case, I have a login server that accepts login attempts with a user’s email and password. 
+If the email/password checks out, the server generates and signs a JWT and hands it back to the user.
+
+With JWT in hand, the user tries to access our microservice: a simple API server with a single endpoint. Kong Gateway 
+sits in front of your API server, using the JWT plugin for authentication. The user presents his JWT with his request.
+
+First, the plugin verifies the token’s authenticity. Next, it confirms the installation steps of the claims 
+inside the payload. A common claim used is an expiration timestamp for the access token. It’s essentially saying, 
+“This token is valid until this date and time.” So, the plugin will check the token’s expiration date.
+
+If the JWT passes all the necessary checks, Kong Gateway grants access to the requested server endpoint. Otherwise, 
+it responds with 401 Unauthorized.
+
