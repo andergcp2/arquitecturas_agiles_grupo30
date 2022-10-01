@@ -1,26 +1,24 @@
-from flask import Flask
-from flask_cors import CORS
 from datetime import datetime
-from random import randint
 import json
 import time
 import redis
+from notify import MailNotificator
 
-app = Flask(__name__)
-
-colaredis = redis.Redis(host="localhost", password="redispw", port=49153, decode_responses=True, encoding="utf-8", )
+colaredis = redis.Redis(host="localhost", port=6379, decode_responses=True, encoding="utf-8", )
 consumer = colaredis.pubsub()
 consumer.subscribe('sec')
+mail_notificador = MailNotificator()
 
 while True:
     message = colaredis.get_message(ignore_subscribe_messages=True)
-    #random_number = randint(1, 20)
     time.sleep(1)
-
     if message is None:
         continue
-    #if random_number != 1:
-    print(str(datetime.now()) +" topis-sec: ", message)
-    message = None
- 
-   # send email
+
+    print(str(datetime.now()) +"topic-sec: ", message)
+    message_decoded = json.loads(message)
+    message_body = message_decoded['mensaje']
+    receptores = message_decoded['receptores']
+
+    for receptor in receptores:
+        mail_notificador.send_mail(receptor, message)
