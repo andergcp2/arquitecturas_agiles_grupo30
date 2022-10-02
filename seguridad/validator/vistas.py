@@ -16,7 +16,8 @@ class VistaSecurityCheck(Resource):
 
     def __init__(self) -> None:
         # self.redis_cli = redis.Redis(host="localhost", password="redispw", port=6379, decode_responses=True, encoding="utf-8", )
-        self.admin_email = 'ag.castiblanco1207@uniandes.edu.co'
+        # self.admin_email = 'ag.castiblanco1207@uniandes.edu.co'
+        self.admin_email = 'c.solanor@uniandes.edu.co'
         self.redis_cli = redis.Redis(host="localhost", port=6379, decode_responses=True, encoding="utf-8", )
         super().__init__()
 
@@ -46,7 +47,7 @@ class VistaSecurityCheck(Resource):
         role = decode_token(headers["Authorization"].split()[1])["role"]
 
         if not role == "CLIENT":
-            self.send_sec_alert("sec", {"status": "403", "mensaje": "security check role does not have access to the resource: "+ role, "receptores": "[{}]".format(self.admin_email)})
+            self.send_sec_alert("sec", {"status": "403", "mensaje": "security check role does not have access to the resource: "+ role, "receptores": "{}".format(self.admin_email)})
             return {"status": "403", "mensaje": "security check role does not have access to the resource: "+ role}
         return True
         
@@ -55,7 +56,7 @@ class VistaSecurityCheck(Resource):
         ips = ['10.20.0.1', '10.20.0.2', '10.20.0.3']
 
         if ip not in ips:
-            self.send_sec_alert("sec", {"status": "400", "mensaje": "security check black list IP: "+ ip, "receptores": "[{}]".format(self.admin_email)})
+            self.send_sec_alert("sec", {"status": "400", "mensaje": "security check black list IP: "+ ip, "receptores": "{}".format(self.admin_email)})
             return {"status": "400", "mensaje": "security check black list IP: "+ ip}
         return True
 
@@ -65,7 +66,7 @@ class VistaSecurityCheck(Resource):
         client_email = self.get_client_email(headers)
 
         if city not in cities:
-            self.send_sec_alert("code-sec", {"status": "403", "mensaje": "security check wrong location: "+ city, "receptores": "[{}, {}]".format(self.admin_email, client_email)})
+            self.send_sec_alert("code-sec", {"status": "403", "mensaje": "security check wrong location: "+ city, "receptores": "{}, {}".format(self.admin_email, client_email)})
             return {"status": "403", "mensaje": "security check wrong location: "+ city}
         return True
 
@@ -75,7 +76,7 @@ class VistaSecurityCheck(Resource):
         if time:
             dt = datetime.strptime(time, '%d.%m.%Y %H:%M:%S')
             if dt.hour >= 0 and dt.hour < 5:
-                self.send_sec_alert("sec", {"status": "403", "mensaje": "security check suspicious time: "+ time, "receptores": "[{}]".format(self.admin_email)})
+                self.send_sec_alert("sec", {"status": "403", "mensaje": "security check suspicious time: "+ time, "receptores": "{}".format(self.admin_email)})
                 return {"status": "403", "mensaje": "security check suspicious time: "+ time}
         return True
 

@@ -20,13 +20,12 @@ cd rules-query
 docker build -t rules-qry:latest .
 docker run -d --name rules-qry-api --network=kong-net -p 5002:5000 rules-qry
 
+
 redis
 =====
-
+docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
 docker run --name miso-redis -d redis
 
-docker run --network=kong-net --name miso-redis -d redis
-docker run -it --network --network=kong-net --rm redis redis-cli -h miso-redis
 
 varios
 ======

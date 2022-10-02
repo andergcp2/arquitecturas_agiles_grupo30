@@ -10,15 +10,15 @@ consumer.subscribe('sec')
 mail_notificador = MailNotificator()
 
 while True:
-    message = colaredis.get_message(ignore_subscribe_messages=True)
+    message = consumer.get_message(ignore_subscribe_messages=True)
     time.sleep(1)
     if message is None:
         continue
 
     print(str(datetime.now()) +"topic-sec: ", message)
-    message_decoded = json.loads(message)
+    message_decoded = json.loads(message['data'])
     message_body = message_decoded['mensaje']
-    receptores = message_decoded['receptores']
+    receptores = message_decoded['receptores'].split(", ")
 
     for receptor in receptores:
-        mail_notificador.send_mail(receptor, message)
+        mail_notificador.send_mail(receptor, message_body)
