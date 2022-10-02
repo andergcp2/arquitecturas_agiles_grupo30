@@ -1,15 +1,11 @@
-from urllib import request
+from flask import request
 from flask import Flask
 from datetime import datetime, timedelta
-import requests
 import json
-import random
-
+import requests
 
 app = Flask(__name__)
-usuarios = [{"user":"admin","password":"adminABC"},{"user":"admin1","password":"adminABC1"},{"user":"admin2","password":"adminABC"},{"user":"mango","password":"mangoABC"}] 
-ips = ['10.20.0.3','10.20.0.1','10.20.0.2','10.20.0.4','10.20.0.5'] 
-ciudades = ['bogota','cali','killa','cartagena','bucaramanga'] 
+
 
 @app.route('/test1')
 def test_dummyjson():
@@ -37,12 +33,13 @@ def test_signin():
 @app.route('/test3')
 def test_ok():
     print(str(datetime.now()) +" test-login")
-    login = {'user': 'admin', 'password': 'adminABC'}
+    login = {'user': 'chispas', 'password': 'chispasABC'}
     login_resp = requests.post('http://localhost:3690/login', json=login) 
+    print(login_resp)
     
     print(str(datetime.now()) +" test-rules")
     token = login_resp.json()['token'] 
-    headers = {'Test-IP': '10.20.0.3', 'Test-City': 'cali', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
+    headers = {'Test-IP': '10.20.0.3', 'Test-City': 'cali', 'Test-Time': '01.10.2022 23:55:30', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
     rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers) 
 
     print(str(datetime.now()) +" test-return")
@@ -52,12 +49,12 @@ def test_ok():
 @app.route('/test4')
 def test_ip():
     print(str(datetime.now()) +" test-login")
-    login = {'user': 'admin', 'password': 'adminABC'}
+    login = {'user': 'chispas', 'password': 'chispasABC'}
     login_resp = requests.post('http://localhost:3690/login', json=login) 
     
     print(str(datetime.now()) +" test-rules")
     token = login_resp.json()['token'] 
-    headers = {'Test-IP': '10.20.0.9', 'Test-City': 'chia', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
+    headers = {'Test-IP': '10.20.0.9', 'Test-City': 'cali', 'Test-Time': '01.10.2022 23:55:30','Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
     rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers) 
 
     print(str(datetime.now()) +" test-return")
@@ -77,46 +74,41 @@ def test_city():
     print(str(datetime.now()) +" test-return")
     return rules_qry_resp.json()
 
-@app.route('/test6')
-def test_validar_acceso():
+@app.route('/test-rules-qry')
+def test():
     print(str(datetime.now()) +" test-login")
-    login = {'user': 'admin', 'password': 'adminABC'} 
+    login = {'user': "{}".format(request.json['user']), 'password': "{}".format(request.json['password']) }
     login_resp = requests.post('http://localhost:3690/login', json=login) 
-    print(login_resp.status_code)
-    if login_resp.status_code == 200:
-        print(str(datetime.now()) +" test-rules")
-        token = login_resp.json()['token'] 
-        headers = {'Test-IP': ips[0], 'Test-City': 'cali', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
-        rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers)
-        print(str(datetime.now()) +" test-return")
-        print(rules_qry_resp.json())
-        return rules_qry_resp.json()
+   
+    print(str(datetime.now()) +" test-rules")
+    headers = {'Test-IP': "{}".format(request.json['IP']), 
+            'Test-City': "{}".format(request.json['City']),
+            'Test-Time': "{}".format(request.json['Time']),
+            'Content-Type': 'application/json', 
+            'Authorization': "Bearer {}".format(login_resp.json()['token'])}
+    rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers) 
 
+    print(str(datetime.now()) +" test-return")
+    return rules_qry_resp.json()    
 
-
-@app.route('/test7')
-def test_validar_acceso_operador():
+@app.route('/test-rules-cmd')
+def testcmd():
     print(str(datetime.now()) +" test-login")
-    login = {'user': 'chispas', 'password': 'chispasABC'} 
+    login = {'user': "{}".format(request.json['user']), 'password': "{}".format(request.json['password']) }
     login_resp = requests.post('http://localhost:3690/login', json=login) 
-    if login_resp.status_code == 200:
-        print(str(datetime.now()) +" test-rules")
-        token = login_resp.json()['token'] 
-        headers = {'Test-IP': ips[1], 'Test-City': ciudades[4], 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
-        rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers)
-        print(str(datetime.now()) +" test-return")
-        print(rules_qry_resp.json())
-        if rules_qry_resp.status_code=='403':
-            print("Enviar mensaje de notificacion")
-        elif rules_qry_resp.status_code==400:
-            print("Correo")
-    
-        return rules_qry_resp.json()
+   
+    print(str(datetime.now()) +" test-rules-cmd")
+    headers = {'Test-IP': "{}".format(request.json['IP']), 
+            'Test-City': "{}".format(request.json['City']),
+            'Test-Time': "{}".format(request.json['Time']),
+            'Content-Type': 'application/json', 
+            'Authorization': "Bearer {}".format(login_resp.json()['token'])}
+    rules_cmd_resp = requests.get('http://localhost:3693/rules', headers = headers) 
 
-
-    
+    print(str(datetime.now()) +" test-return")
+    return rules_cmd_resp.json()   
     
 
 
 #if __name__ == "__main__":
- #   app.run(debug=True)
+#    app.run(debug=True)
