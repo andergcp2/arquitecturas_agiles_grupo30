@@ -2,12 +2,12 @@ from datetime import datetime
 import json
 import time
 import redis
-from notify import MailNotificator
+from notifySms import SmsNotificator
 
 colaredis = redis.Redis(host="localhost", port=6379, decode_responses=True, encoding="utf-8", )
 consumer = colaredis.pubsub()
 consumer.subscribe('code-sec')
-mail_notificador = MailNotificator()
+sms_notificador = SmsNotificator()
 
 while True:
     message = consumer.get_message(ignore_subscribe_messages=True)
@@ -21,4 +21,4 @@ while True:
     receptores = message_decoded['receptores'].split(", ")
 
     for receptor in receptores:
-        mail_notificador.send_mail(receptor, message_body)
+        sms_notificador.send_sms("573156029459", message_body)

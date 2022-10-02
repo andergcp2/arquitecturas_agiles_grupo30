@@ -25,6 +25,6 @@ class MailNotificator():
         # s.set_debuglevel(1)
         # do the smtp auth; sends ehlo if it hasn't been sent already
         s.login(ME, my_password)
-
+        print(f"Enviando mensaje: {message} to: {mail_to}")
         s.sendmail(ME, mail_to, msg.as_string())
         s.quit()
