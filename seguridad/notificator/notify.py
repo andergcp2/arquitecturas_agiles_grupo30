@@ -6,8 +6,8 @@ from email.mime.text import MIMEText
 class MailNotificator():
 
     def send_mail(self, mail_to, message):
-        ME = ""
-        my_password = r""
+        ME = "scesar.ing@gmail.com"
+        my_password = r"nogfplgrwzukjzby"
 
         msg = MIMEMultipart('alternative')
         msg['Subject'] = "Alerta"

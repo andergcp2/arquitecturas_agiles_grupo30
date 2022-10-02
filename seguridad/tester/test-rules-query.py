@@ -23,16 +23,15 @@ class TestSecurityRulesQuery(TestCase):
         self.headers_ope_error_time = {'user': 'chispas', 'password': 'chispasABC', 'IP': '10.20.0.2', 'City': 'Armenia', 'Time': '02.10.2022 01:25:30'}
         self.headers_cli_error_time = {'user': 'mango', 'password': 'mangoABC', 'IP': '10.20.0.2', 'City': 'Barranquilla', 'Time': '02.10.2022 01:25:30'}
         self.headers_adm_error_time  = {'user': 'admin', 'password': 'adminABC', 'IP': '10.20.0.2', 'City': 'Cancun', 'Time': '02.10.2022 01:25:30'}
-
+        print("")
         
-    
     def test_client_headers_ok_security_ok(self):
         req = self.client.get("/test-rules-qry", json = self.headers_cli)
         resp = json.loads(req.get_data())
         print(str(datetime.now()) +" resp: "+ str(resp))
         self.assertEqual(req.status_code, 200)
         self.assertEqual(resp['status'], '200')
-    
+
     def test_operator_headers_ok_security_ok(self):
         req = self.client.get("/test-rules-qry", json = self.headers_ope)
         resp = json.loads(req.get_data())
@@ -46,7 +45,7 @@ class TestSecurityRulesQuery(TestCase):
         print(str(datetime.now()) +" resp: "+ str(resp))
         self.assertEqual(req.status_code, 200)
         self.assertEqual(resp['status'], '403')
-    
+
     def test_client_headers_ip_error_security_ok(self):
         req = self.client.get("/test-rules-qry", json = self.headers_cli_error_ip)
         resp = json.loads(req.get_data())
@@ -88,7 +87,6 @@ class TestSecurityRulesQuery(TestCase):
         print(str(datetime.now()) +" resp: "+ str(resp))
         self.assertEqual(req.status_code, 200)
         self.assertEqual(resp['status'], '403') 
-
     
     def test_client_headers_time_error_security_ok(self):
         req = self.client.get("/test-rules-qry", json = self.headers_cli_error_time)
@@ -174,7 +172,6 @@ class TestSecurityRulesQuery(TestCase):
         print(str(datetime.now()) +" resp: "+ str(resp))
         self.assertEqual(req.status_code, 200)
         self.assertEqual(resp['status'], '403') 
-
     
     def test_client_headers_time_error_security_ok_cmd(self):
         req = self.client.get("/test-rules-cmd", json = self.headers_cli_error_time)
@@ -196,4 +193,4 @@ class TestSecurityRulesQuery(TestCase):
         print(str(datetime.now()) +" resp: "+ str(resp))
         self.assertEqual(req.status_code, 200)
         self.assertEqual(resp['status'], '403')
-    
+""" """ 
