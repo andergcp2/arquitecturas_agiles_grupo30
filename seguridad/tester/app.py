@@ -14,9 +14,9 @@ def test_dummyjson():
 
 @app.route('/test2')
 def test_signin():
-    admin = {'user': 'admin', 'password': 'adminABC', 'name':'Administrator', 'email':'admin@monitor-abc.co', 'role':'ADMIN'} 
-    client = {'user': 'mango', 'password': 'mangoABC', 'name':'Mr Mango', 'email':'mango@cats.co', 'role':'CLIENT'}
-    operator = {'user': 'chispas', 'password': 'chispasABC', 'name':'Chispitas', 'email':'chispas@cats.co','role':'OPERATOR'}
+    admin = {'user': 'admin', 'password': 'adminABC', 'name':'Administrator', 'email':'marlonagon@yahoo.com', 'role':'ADMIN'} 
+    operator = {'user': 'chispas', 'password': 'chispasABC', 'name':'Chispitas', 'email':'cesar_2005@hotmail.com','role':'OPERATOR'}
+    client = {'user': 'mango', 'password': 'mangoABC', 'name':'Mr Mango', 'email':'m.agonf@uniandes.edu.co', 'role':'CLIENT'}
 
     resp = requests.post('http://localhost:3690/signin', json=admin) 
     print("test-signin " + admin['user'] + str(resp.status_code))
@@ -33,16 +33,16 @@ def test_signin():
 @app.route('/test3')
 def test_ok():
     print(str(datetime.now()) +" test-login")
-    login = {'user': 'chispas', 'password': 'chispasABC'}
+    login = {'user': 'mango', 'password': 'mangoABC'}
     login_resp = requests.post('http://localhost:3690/login', json=login) 
     print(login_resp)
     
     print(str(datetime.now()) +" test-rules")
     token = login_resp.json()['token'] 
-    headers = {'Test-IP': '10.20.0.3', 'Test-City': 'cali', 'Test-Time': '01.10.2022 23:55:30', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
+    headers = {'Test-IP': '10.20.0.3', 'Test-City': 'cali', 'Test-Time': '02.10.2022 03:55:30', 'Content-Type': 'application/json', 'Authorization': "Bearer {}".format(token)}
     rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers) 
 
-    print(str(datetime.now()) +" test-return")
+    print(str(datetime.now()) +" test-return "+ str(rules_qry_resp))
     return rules_qry_resp.json()
 
 

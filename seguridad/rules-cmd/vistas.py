@@ -18,7 +18,7 @@ class VistaRules(Resource):
     @jwt_required()
     def get(self):
         # user_id = get_jwt_identity()
-        print("rules-qry headers: ", request.headers)
+        # print("rules-qry headers: ", request.headers)
         security_resp = requests.post('http://localhost:3691/check', headers = request.headers)
         print("rules-qry security resp: ", security_resp)
 
