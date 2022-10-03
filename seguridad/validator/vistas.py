@@ -76,7 +76,7 @@ class VistaSecurityCheck(Resource):
         if time:
             dt = datetime.strptime(time, '%d.%m.%Y %H:%M:%S')
             if dt.hour >= 0 and dt.hour < 5:
-                self.send_sec_alert("sec", {"status": "403", "mensaje": "security check suspicious time: "+ time, "receptores": "{}".format(self.admin_email)})
+                self.send_sec_alert("code-sec", {"status": "403", "mensaje": "security check suspicious time: "+ time, "receptores": "{}".format(self.admin_email)})
                 return {"status": "403", "mensaje": "security check suspicious time: "+ time}
         return True
 

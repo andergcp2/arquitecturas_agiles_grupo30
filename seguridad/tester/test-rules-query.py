@@ -18,10 +18,10 @@ class TestSecurityRulesQuery(TestCase):
         self.headers_cli_error_ip = {'user': 'mango', 'password': 'mangoABC', 'IP': '10.20.0.8', 'City': 'cali', 'Time': '01.10.2022 23:45:30'}
         self.headers_adm_error_ip  = {'user': 'admin', 'password': 'adminABC', 'IP': '10.20.0.8', 'City': 'cali', 'Time': '01.10.2022 23:45:30'}
         self.headers_ope_error_city = {'user': 'chispas', 'password': 'chispasABC', 'IP': '10.20.0.2', 'City': 'Armenia', 'Time': '01.10.2022 23:45:30'}
-        self.headers_cli_error_city = {'user': 'mango', 'password': 'mangoABC', 'IP': '10.20.0.2', 'City': 'Barranquilla', 'Time': '01.10.2022 23:45:30'}
+        self.headers_cli_error_city = {'user': 'mango', 'password': 'mangoABC', 'IP': '10.20.0.2', 'City': 'Cartagena', 'Time': '01.10.2022 23:45:30'}
         self.headers_adm_error_city  = {'user': 'admin', 'password': 'adminABC', 'IP': '10.20.0.2', 'City': 'Cancun', 'Time': '01.10.2022 23:45:30'}
         self.headers_ope_error_time = {'user': 'chispas', 'password': 'chispasABC', 'IP': '10.20.0.2', 'City': 'Armenia', 'Time': '02.10.2022 01:25:30'}
-        self.headers_cli_error_time = {'user': 'mango', 'password': 'mangoABC', 'IP': '10.20.0.2', 'City': 'Barranquilla', 'Time': '02.10.2022 01:25:30'}
+        self.headers_cli_error_time = {'user': 'mango', 'password': 'mangoABC', 'IP': '10.20.0.2', 'City': 'bogota', 'Time': '02.10.2022 03:30:15'}
         self.headers_adm_error_time  = {'user': 'admin', 'password': 'adminABC', 'IP': '10.20.0.2', 'City': 'Cancun', 'Time': '02.10.2022 01:25:30'}
         print("")
         

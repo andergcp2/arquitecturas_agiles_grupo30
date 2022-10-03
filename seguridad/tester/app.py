@@ -76,11 +76,11 @@ def test_city():
 
 @app.route('/test-rules-qry')
 def test():
-    print(str(datetime.now()) +" test-login")
+    #print(str(datetime.now()) +" test-login")
     login = {'user': "{}".format(request.json['user']), 'password': "{}".format(request.json['password']) }
     login_resp = requests.post('http://localhost:3690/login', json=login) 
    
-    print(str(datetime.now()) +" test-rules")
+    #print(str(datetime.now()) +" test-rules")
     headers = {'Test-IP': "{}".format(request.json['IP']), 
             'Test-City': "{}".format(request.json['City']),
             'Test-Time': "{}".format(request.json['Time']),
@@ -88,16 +88,16 @@ def test():
             'Authorization': "Bearer {}".format(login_resp.json()['token'])}
     rules_qry_resp = requests.get('http://localhost:3692/rules', headers = headers) 
 
-    print(str(datetime.now()) +" test-return")
+    #print(str(datetime.now()) +" test-return")
     return rules_qry_resp.json()    
 
 @app.route('/test-rules-cmd')
 def testcmd():
-    print(str(datetime.now()) +" test-login")
+    #print(str(datetime.now()) +" test-login")
     login = {'user': "{}".format(request.json['user']), 'password': "{}".format(request.json['password']) }
     login_resp = requests.post('http://localhost:3690/login', json=login) 
    
-    print(str(datetime.now()) +" test-rules-cmd")
+    #print(str(datetime.now()) +" test-rules-cmd")
     headers = {'Test-IP': "{}".format(request.json['IP']), 
             'Test-City': "{}".format(request.json['City']),
             'Test-Time': "{}".format(request.json['Time']),
@@ -105,7 +105,7 @@ def testcmd():
             'Authorization': "Bearer {}".format(login_resp.json()['token'])}
     rules_cmd_resp = requests.get('http://localhost:3693/rules', headers = headers) 
 
-    print(str(datetime.now()) +" test-return")
+    #print(str(datetime.now()) +" test-return")
     return rules_cmd_resp.json()   
     
 

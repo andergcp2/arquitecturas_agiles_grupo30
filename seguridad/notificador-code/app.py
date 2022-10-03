@@ -20,5 +20,5 @@ while True:
     message_body = message_decoded['mensaje']
     receptores = message_decoded['receptores'].split(", ")
 
-    for receptor in receptores:
-        sms_notificador.send_sms("573156029459", message_body)
+    #for receptor in receptores:
+    sms_notificador.send_sms("573156029459", message_body)

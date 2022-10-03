@@ -2,7 +2,7 @@ import requests
 
 class SmsNotificator():
 
-    def send_sms(telephone, message):
+    def send_sms(self, telephone, message):
 
         SMPP_URL = 'https://sms.frankpaul.co/Api/rest/message'
 
